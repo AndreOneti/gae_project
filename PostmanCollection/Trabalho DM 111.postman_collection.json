@@ -1,0 +1,35 @@
+{
+	"info": {
+		"_postman_id": "8dc4dcf9-affc-48d8-ae15-ab19148e1fbf",
+		"name": "Trabalho DM 111",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Dog",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://projectdm111ac.uc.r.appspot.com/api/test/dog/Matilde",
+					"protocol": "https",
+					"host": [
+						"projectdm111ac",
+						"uc",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"test",
+						"dog",
+						"Matilde"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
