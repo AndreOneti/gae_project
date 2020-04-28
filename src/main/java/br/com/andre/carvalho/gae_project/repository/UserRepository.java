@@ -35,6 +35,7 @@ public class UserRepository {
     private static final String PROPERTY_LAST_FCM_REGISTER = "lastFCMRegister";
     private static final String PROPERTY_ROLE = "role";
     private static final String PROPERTY_ENABLED = "enabled";
+    private static final String PROPERTY_CPF = "CPF";
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -73,6 +74,7 @@ public class UserRepository {
         userEntity.setProperty(PROPERTY_LAST_FCM_REGISTER, user.getLastFCMRegister());
         userEntity.setProperty(PROPERTY_ROLE, user.getRole());
         userEntity.setProperty(PROPERTY_ENABLED, user.isEnabled());
+        userEntity.setProperty(PROPERTY_CPF, user.getCpf());
     }
 
     private User entityToUser(Entity userEntity) {
@@ -85,6 +87,7 @@ public class UserRepository {
         user.setLastFCMRegister((Date) userEntity.getProperty(PROPERTY_LAST_FCM_REGISTER));
         user.setRole((String) userEntity.getProperty(PROPERTY_ROLE));
         user.setEnabled((Boolean) userEntity.getProperty(PROPERTY_ENABLED));
+        user.setCpf((String) userEntity.getProperty(PROPERTY_CPF));
         return user;
     }
 
@@ -104,9 +107,25 @@ public class UserRepository {
         }
     }
 
+    private boolean checkIfCpfExist(User user) {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter filter = new Query.FilterPredicate(PROPERTY_CPF, Query.FilterOperator.EQUAL, user.getCpf());
+        Query query = new Query(USER_KIND).setFilter(filter);
+        Entity userEntity = datastore.prepare(query).asSingleEntity();
+        if (userEntity == null) {
+            return false;
+        } else {
+            if (user.getId() == null) {
+                return true;
+            } else {
+                return userEntity.getKey().getId() != user.getId();
+            }
+        }
+    }
+
     public User saveUser(User user) throws UserAlreadyExistsException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        if (!checkIfEmailExist(user)) {
+        if (!checkIfEmailExist(user) && !checkIfCpfExist(user)) {
             Key userKey = KeyFactory.createKey(USER_KIND, USER_KEY);
             Entity userEntity = new Entity(USER_KIND, userKey);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -120,7 +139,7 @@ public class UserRepository {
     }
 
     public User updateUser(User user, String email) throws UserNotFoundException, UserAlreadyExistsException {
-        if (!checkIfEmailExist(user)) {
+        if (!checkIfEmailExist(user) && !checkIfCpfExist(user)) {
             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
             Query.Filter emailFilter = new Query.FilterPredicate(PROPERTY_EMAIL, Query.FilterOperator.EQUAL, email);
             Query query = new Query(USER_KIND).setFilter(emailFilter);

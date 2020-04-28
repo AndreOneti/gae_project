@@ -19,6 +19,7 @@ public class User implements Serializable, UserDetails {
     private Date lastLogin;
     private Date lastFCMRegister;
     private String role;
+    private String cpf;
     private boolean enabled;
 
     @Override
@@ -113,5 +114,13 @@ public class User implements Serializable, UserDetails {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 }
