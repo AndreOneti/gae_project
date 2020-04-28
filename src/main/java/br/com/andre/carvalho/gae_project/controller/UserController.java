@@ -53,8 +53,7 @@ public class UserController {
                     if (!hasRoleAdmin) {
                         user.setRole("USER");
                     }
-                    return new ResponseEntity<User>(userRepository.updateUser
-                            (user, email), HttpStatus.OK);
+                    return new ResponseEntity<User>(userRepository.updateUser(user, email), HttpStatus.OK);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }

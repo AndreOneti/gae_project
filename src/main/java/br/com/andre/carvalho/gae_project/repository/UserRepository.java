@@ -35,7 +35,7 @@ public class UserRepository {
     private static final String PROPERTY_LAST_FCM_REGISTER = "lastFCMRegister";
     private static final String PROPERTY_ROLE = "role";
     private static final String PROPERTY_ENABLED = "enabled";
-    private static final String PROPERTY_CPF = "CPF";
+    private static final String PROPERTY_CPF = "cpf";
 
     @Autowired
     private PasswordEncoder passwordEncoder;

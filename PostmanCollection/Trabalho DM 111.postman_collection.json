@@ -6,29 +6,382 @@
 	},
 	"item": [
 		{
-			"name": "Get Dog",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://projectdm111ac.uc.r.appspot.com/api/test/dog/Matilde",
-					"protocol": "https",
-					"host": [
-						"projectdm111ac",
-						"uc",
-						"r",
-						"appspot",
-						"com"
-					],
-					"path": [
-						"api",
-						"test",
-						"dog",
-						"Matilde"
-					]
+			"name": "Dog",
+			"item": [
+				{
+					"name": "Get Dog",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/test/dog/Matilde",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"test",
+								"dog",
+								"Matilde"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/products/1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/products",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"Model 1\",\n    \"productID\": \"1\",\n    \"name\": \"Name 1\",\n    \"price\": 10,\n    \"code\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/products",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/products/1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"Model 1\",\n    \"productID\": \"1\",\n    \"name\": \"Name 1\",\n    \"price\": 100,\n    \"code\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/products/1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get User",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/users/byemail?email=doralice@siecola.com.br",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"byemail"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "doralice@siecola.com.br"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All User",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/users",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"doralice@siecola.com.br\",\n    \"password\": \"doralice\",\n    \"gcmRegId\": null,\n    \"lastLogin\": null,\n    \"lastGCMRegister\": null,\n    \"role\": \"ROLE_USER\",\n    \"cpf\": \"11111111111\",\n    \"enabled\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/users",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/users/byemail?email=doralice@siecola.com.br",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"byemail"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "doralice@siecola.com.br"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"Model 1\",\n    \"productID\": \"1\",\n    \"name\": \"Name 1\",\n    \"price\": 100,\n    \"code\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/users/byemail?email=doralice@siecola.com.br",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"byemail"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "doralice@siecola.com.br"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
