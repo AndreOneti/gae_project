@@ -5,6 +5,7 @@ import br.com.andre.carvalho.gae_project.model.Product;
 import com.google.appengine.api.datastore.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.logging.Logger;
@@ -29,6 +30,7 @@ public class ProductController {
     }
 
     @GetMapping("/{code}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Product> getProduct(@PathVariable int code) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query.Filter codeFilter = new Query.FilterPredicate("Code", Query.FilterOperator.EQUAL, code);
@@ -43,6 +45,7 @@ public class ProductController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<Product>> getProducts() {
         List<Product> products = new ArrayList<>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -57,6 +60,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> saveProduct(@RequestBody Product product) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Key productKey = KeyFactory.createKey("Products", "productKey");
@@ -68,6 +72,7 @@ public class ProductController {
     }
 
     @DeleteMapping(path = "/{code}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> deleteProduct(@PathVariable("code") int code) {
         //Mensagem 1 - DEBUG
         log.fine("Tentando apagar produto com código=[" + code + "]");
@@ -90,6 +95,7 @@ public class ProductController {
     }
 
     @PutMapping(path = "/{code}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable("code") int code) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query.Filter codeFilter = new Query.FilterPredicate("Code", Query.FilterOperator.EQUAL, code);
