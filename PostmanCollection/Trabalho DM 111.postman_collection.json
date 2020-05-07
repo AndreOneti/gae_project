@@ -37,6 +37,26 @@
 				{
 					"name": "Get Product",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -56,6 +76,26 @@
 				{
 					"name": "Get All Products",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -74,6 +114,26 @@
 				{
 					"name": "Create Product",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -101,6 +161,26 @@
 				{
 					"name": "Delete Product",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -120,6 +200,26 @@
 				{
 					"name": "Edit Product",
 					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -152,14 +252,14 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "Get User",
+					"name": "Get User By E-mail",
 					"request": {
 						"auth": {
 							"type": "oauth2",
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"value": "b38e51be-f1f2-4b18-b886-219d3a2bd538",
 									"type": "string"
 								},
 								{
@@ -192,7 +292,54 @@
 									"value": "doralice@siecola.com.br"
 								}
 							]
-						}
+						},
+						"description": "Need OAuth2.0 token to retrieve an user by e-mail.\n\nJust owner user or admin can retrieve the data."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By CPF",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "09d65171-f63c-44d2-b958-4a2b81965919",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/users/bycpf?cpf=11111111111",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"bycpf"
+							],
+							"query": [
+								{
+									"key": "cpf",
+									"value": "11111111111"
+								}
+							]
+						},
+						"description": "Need OAuth2.0 token to retrieve an user by cpf.\n\nJust owner user or admin can retrieve the data."
 					},
 					"response": []
 				},
@@ -204,7 +351,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
 									"type": "string"
 								},
 								{
@@ -230,7 +377,8 @@
 								"api",
 								"users"
 							]
-						}
+						},
+						"description": "Need OAuth2.0 token to retrieve all users.\n\nJust admin can retrieve this data."
 					},
 					"response": []
 				},
@@ -242,7 +390,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
 									"type": "string"
 								},
 								{
@@ -277,7 +425,8 @@
 								"api",
 								"users"
 							]
-						}
+						},
+						"description": "Need OAuth2.0 token to create a new user.\ne-mail and cpf is unique on database.\n\nJust admin can create a new user."
 					},
 					"response": []
 				},
@@ -289,7 +438,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
 									"type": "string"
 								},
 								{
@@ -307,22 +456,23 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{server}}/api/users/byemail?email=doralice@siecola.com.br",
+							"raw": "{{server}}/api/users/bycpf?cpf=11111111111",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"byemail"
+								"bycpf"
 							],
 							"query": [
 								{
-									"key": "email",
-									"value": "doralice@siecola.com.br"
+									"key": "cpf",
+									"value": "11111111111"
 								}
 							]
-						}
+						},
+						"description": "Need OAuth2.0 token to delete user by CPF.\n\nJust owner or admin user can delete the user."
 					},
 					"response": []
 				},
@@ -376,7 +526,8 @@
 									"value": "doralice@siecola.com.br"
 								}
 							]
-						}
+						},
+						"description": "Need OAuth2.0 token to edit user by e-mail.\n\nJust owner or admin user can edit the user."
 					},
 					"response": []
 				}

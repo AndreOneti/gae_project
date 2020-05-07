@@ -17,6 +17,7 @@ public class User implements Serializable, UserDetails {
     private String password;
     private String fcmRegId;
     private Date lastLogin;
+    private Date lastModification;
     private Date lastFCMRegister;
     private String role;
     private String cpf;
@@ -122,5 +123,13 @@ public class User implements Serializable, UserDetails {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public Date getLastModification() {
+        return lastModification;
+    }
+
+    public void setLastModification(Date lastModification) {
+        this.lastModification = lastModification;
     }
 }

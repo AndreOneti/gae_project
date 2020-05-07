@@ -9,10 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Logger;
 
 import javax.cache.Cache;
@@ -32,6 +29,7 @@ public class UserRepository {
     private static final String PROPERTY_PASSWORD = "password";
     private static final String PROPERTY_FCM_REG_ID = "fcmRegId";
     private static final String PROPERTY_LAST_LOGIN = "lastLogin";
+    private static final String PROPERTY_LAST_MODIFICATION = "lastModification";
     private static final String PROPERTY_LAST_FCM_REGISTER = "lastFCMRegister";
     private static final String PROPERTY_ROLE = "role";
     private static final String PROPERTY_ENABLED = "enabled";
@@ -125,6 +123,7 @@ public class UserRepository {
 
     public User saveUser(User user) throws UserAlreadyExistsException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        user.setLastModification((Date) Calendar.getInstance().getTime());
         if (!checkIfEmailExist(user) && !checkIfCpfExist(user)) {
             Key userKey = KeyFactory.createKey(USER_KIND, USER_KEY);
             Entity userEntity = new Entity(USER_KIND, userKey);
@@ -140,6 +139,7 @@ public class UserRepository {
 
     public User updateUser(User user, String email) throws UserNotFoundException, UserAlreadyExistsException {
         if (!checkIfEmailExist(user) && !checkIfCpfExist(user)) {
+            user.setLastModification((Date) Calendar.getInstance().getTime());
             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
             Query.Filter emailFilter = new Query.FilterPredicate(PROPERTY_EMAIL, Query.FilterOperator.EQUAL, email);
             Query query = new Query(USER_KIND).setFilter(emailFilter);
@@ -170,6 +170,19 @@ public class UserRepository {
         }
     }
 
+    public Optional<User> getByCpf(String cpf) {
+        log.info("User CPF: " + cpf);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query.Filter filter = new Query.FilterPredicate(PROPERTY_CPF, Query.FilterOperator.EQUAL, cpf);
+        Query query = new Query(USER_KIND).setFilter(filter);
+        Entity userEntity = datastore.prepare(query).asSingleEntity();
+        if (userEntity != null) {
+            return Optional.ofNullable(entityToUser(userEntity));
+        } else {
+            return Optional.empty();
+        }
+    }
+
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -183,16 +196,46 @@ public class UserRepository {
         return users;
     }
 
-    public User deleteUser(String email) throws UserNotFoundException {
+    public User deleteUser(String cpf) throws UserNotFoundException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query.Filter userFilter = new Query.FilterPredicate(PROPERTY_EMAIL, Query.FilterOperator.EQUAL, email);
+        Query.Filter userFilter = new Query.FilterPredicate(PROPERTY_CPF, Query.FilterOperator.EQUAL, cpf);
         Query query = new Query(USER_KIND).setFilter(userFilter);
         Entity userEntity = datastore.prepare(query).asSingleEntity();
         if (userEntity != null) {
             datastore.delete(userEntity.getKey());
             return entityToUser(userEntity);
         } else {
-            throw new UserNotFoundException("Usuário " + email + " não encontrado");
+            throw new UserNotFoundException("Usuário com cpf " + cpf + " não encontrado");
+        }
+    }
+
+    public void updateUserLogin(User user) {
+        boolean canUseCache = true;
+        boolean saveOnCache = true;
+        Cache cache;
+        try {
+            CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+            cache = cacheFactory.createCache(Collections.emptyMap());
+            if (cache.containsKey(user.getEmail())) {
+                Date lastLogin = (Date) cache.get(user.getEmail());
+                if ((Calendar.getInstance().getTime().getTime() - lastLogin.getTime()) < 30000) {
+                    saveOnCache = false;
+                }
+            }
+            if (saveOnCache) {
+                cache.put(user.getEmail(), (Date) Calendar.getInstance().getTime());
+                canUseCache = false;
+            }
+        } catch (CacheException e) {
+            canUseCache = false;
+        }
+        if (!canUseCache) {
+            user.setLastLogin((Date) Calendar.getInstance().getTime());
+            try {
+                this.updateUser(user, user.getEmail());
+            } catch (UserAlreadyExistsException | UserNotFoundException e) {
+                log.severe("Falha ao atualizar último login do usuário");
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ public class UserController {
         try {
             return new ResponseEntity<User>(userRepository.saveUser(user), HttpStatus.OK);
         } catch (UserAlreadyExistsException e) {
-            return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -48,8 +48,7 @@ public class UserController {
             try {
                 boolean hasRoleAdmin = CheckRole.hasRoleAdmin(authentication);
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                if (hasRoleAdmin || userDetails.getUsername().equals(email)
-                ) {
+                if (hasRoleAdmin || userDetails.getUsername().equals(email)) {
                     if (!hasRoleAdmin) {
                         user.setRole("USER");
                     }
@@ -83,15 +82,36 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(path = "/byemail")
-    public ResponseEntity<User> deleteUser(@RequestParam("email") String email, Authentication authentication) {
+    @GetMapping("/bycpf")
+    public ResponseEntity<User> getUserByCpf(@RequestParam String cpf, Authentication authentication) {
+        boolean hasRoleAdmin = CheckRole.hasRoleAdmin(authentication);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Optional<User> optUser = userRepository.getByCpf(cpf);
+        if (optUser.isPresent()) {
+            if (hasRoleAdmin || userDetails.getUsername().equals(optUser.get().getEmail())) {
+                return new ResponseEntity<User>(optUser.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping(path = "/bycpf")
+    public ResponseEntity<User> deleteUser(@RequestParam("cpf") String cpf, Authentication authentication) {
         try {
             boolean hasRoleAdmin = CheckRole.hasRoleAdmin(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            if (hasRoleAdmin || userDetails.getUsername().equals(email)) {
-                return new ResponseEntity<User>(userRepository.deleteUser(email), HttpStatus.OK);
+            Optional<User> optUser = userRepository.getByCpf(cpf);
+            if (optUser.isPresent()) {
+                if (hasRoleAdmin || userDetails.getUsername().equals(optUser.get().getEmail())) {
+                    return new ResponseEntity<User>(userRepository.deleteUser(cpf), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
             } else {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -20,6 +20,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<br.com.andre.carvalho.gae_project.model.User> optUser = userRepository.getByEmail(email);
         if (optUser.isPresent()) {
+            userRepository.updateUserLogin(optUser.get());
             return optUser.get();
         } else {
             throw new UsernameNotFoundException("Usuário não encontrado");
