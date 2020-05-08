@@ -81,7 +81,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"value": "724b0317-edee-4fe5-aa14-fb13cee2e70c",
 									"type": "string"
 								},
 								{
@@ -119,7 +119,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"value": "724b0317-edee-4fe5-aa14-fb13cee2e70c",
 									"type": "string"
 								},
 								{
@@ -305,7 +305,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "09d65171-f63c-44d2-b958-4a2b81965919",
+									"value": "1da0d68c-b712-467e-b68d-57681bdce53a",
 									"type": "string"
 								},
 								{
@@ -351,7 +351,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"value": "724b0317-edee-4fe5-aa14-fb13cee2e70c",
 									"type": "string"
 								},
 								{
@@ -390,7 +390,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"value": "93015a98-72ea-4efa-987f-31e25ee72a52",
 									"type": "string"
 								},
 								{
@@ -409,7 +409,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"doralice@siecola.com.br\",\n    \"password\": \"doralice\",\n    \"gcmRegId\": null,\n    \"lastLogin\": null,\n    \"lastGCMRegister\": null,\n    \"role\": \"ROLE_USER\",\n    \"cpf\": \"11111111111\",\n    \"enabled\": true\n}",
+							"raw": "{\n    \"email\": \"doralice@siecola.com.br\",\n    \"password\": \"doralice\",\n    \"fcmRegId\": null,\n    \"lastLogin\": null,\n    \"lastFCMRegister\": null,\n    \"role\": \"ROLE_USER\",\n    \"cpf\": \"11111111111\",\n    \"enabled\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -438,7 +438,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"value": "93015a98-72ea-4efa-987f-31e25ee72a52",
 									"type": "string"
 								},
 								{
@@ -484,7 +484,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "db93b197-c1fb-4c02-957e-49b36547ce7b",
+									"value": "724b0317-edee-4fe5-aa14-fb13cee2e70c",
 									"type": "string"
 								},
 								{
@@ -503,7 +503,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"model\": \"Model 1\",\n    \"productID\": \"1\",\n    \"name\": \"Name 1\",\n    \"price\": 100,\n    \"code\": 1\n}",
+							"raw": "{\n    \"id\": \"5706627130851328\",\n    \"email\": \"doralice@siecola.com.br\",\n    \"password\": \"$2a$10$dKMUf5JNBcHpw9HzKCB9Te.RxptHgiQBv1zuoHPg1PRBvO8ap49TC\",\n    \"fcmRegId\": \"fMXDcqyTXqc:APA91bG4KNhgZPMEpCTGlM1NTJtpQ8Lgi-n6HQEFtH-hjhrv-KfqhHhLGsyRJnBPbwQcZHcVDm5lRP57qW1ivPWHKkOU-fIZTC1QihEDtUgNeTFMIl5osRArnq9GUcoYEQppp4L4iWsd\",\n    \"role\": \"ROLE_USER\",\n    \"cpf\": \"11111111111\",\n    \"enabled\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -528,6 +528,61 @@
 							]
 						},
 						"description": "Need OAuth2.0 token to edit user by e-mail.\n\nJust owner or admin user can edit the user."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "FCM",
+			"item": [
+				{
+					"name": "Send Message",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "724b0317-edee-4fe5-aa14-fb13cee2e70c",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/message/sendproduct?email=doralice@siecola.com.br&productCode=1",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"message",
+								"sendproduct"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "doralice@siecola.com.br"
+								},
+								{
+									"key": "productCode",
+									"value": "1"
+								}
+							]
+						}
 					},
 					"response": []
 				}

@@ -119,7 +119,7 @@ public class ProductController {
         productEntity.setProperty("Price", product.getPrice());
     }
 
-    private Product entityToProduct(Entity productEntity) {
+    public static Product entityToProduct(Entity productEntity) {
         Product product = new Product();
         product.setId(productEntity.getKey().getId());
         product.setProductID((String) productEntity.getProperty("ProductID"));
