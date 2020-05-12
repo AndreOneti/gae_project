@@ -42,7 +42,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"value": "9f2e3044-bcbb-4ce7-81e3-5a4650d97646",
 									"type": "string"
 								},
 								{
@@ -81,7 +81,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "724b0317-edee-4fe5-aa14-fb13cee2e70c",
+									"value": "0a69f1ed-57ee-441d-bb49-a830283e103b",
 									"type": "string"
 								},
 								{
@@ -259,7 +259,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "b38e51be-f1f2-4b18-b886-219d3a2bd538",
+									"value": "1fbc2208-6392-4a7f-8e10-73c98796c099",
 									"type": "string"
 								},
 								{
@@ -351,7 +351,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "724b0317-edee-4fe5-aa14-fb13cee2e70c",
+									"value": "ca03a8c7-3361-4d5c-9863-561d9df088a1",
 									"type": "string"
 								},
 								{
@@ -484,7 +484,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "724b0317-edee-4fe5-aa14-fb13cee2e70c",
+									"value": "c222a31e-ea3e-4079-9968-4043d626103b",
 									"type": "string"
 								},
 								{
@@ -503,7 +503,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"5706627130851328\",\n    \"email\": \"doralice@siecola.com.br\",\n    \"password\": \"$2a$10$dKMUf5JNBcHpw9HzKCB9Te.RxptHgiQBv1zuoHPg1PRBvO8ap49TC\",\n    \"fcmRegId\": \"fMXDcqyTXqc:APA91bG4KNhgZPMEpCTGlM1NTJtpQ8Lgi-n6HQEFtH-hjhrv-KfqhHhLGsyRJnBPbwQcZHcVDm5lRP57qW1ivPWHKkOU-fIZTC1QihEDtUgNeTFMIl5osRArnq9GUcoYEQppp4L4iWsd\",\n    \"role\": \"ROLE_USER\",\n    \"cpf\": \"11111111111\",\n    \"enabled\": true\n}",
+							"raw": "{\n    \"id\": \"5706627130851328\",\n    \"email\": \"doralice@siecola.com.br\",\n    \"password\": \"$2a$10$dKMUf5JNBcHpw9HzKCB9Te.RxptHgiQBv1zuoHPg1PRBvO8ap49TC\",\n    \"fcmRegId\": \"dJJzkwUn4e8:APA91bFWzDVAPiSLuYkJogIQWASRK9zyv5-vV3ihyBwMpsbI0G6_rFXp4JlBsQyaID6AT3wBZWdXs3t540OGJzDciaOjm86pN6HfIQphSDJ4l5QkWB1u0craQ1E9R5mjd0Srwq4G9hY5\",\n    \"role\": \"ROLE_USER\",\n    \"cpf\": \"11111111111\",\n    \"enabled\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -528,6 +528,97 @@
 							]
 						},
 						"description": "Need OAuth2.0 token to edit user by e-mail.\n\nJust owner or admin user can edit the user."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Product Interest",
+			"item": [
+				{
+					"name": "Get All Product Interest",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "f8b67ce8-e816-4409-aa5d-d57f97772bfa",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/interest",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"interest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product Interest",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "1c67c9e4-f3bd-4bb5-8523-d2c74d1970bd",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"price\": 9,\n    \"cpf\": \"11111111111\",\n    \"userId\": \"4644337115725824\",\n    \"productId\": \"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/interest",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"interest"
+							]
+						}
 					},
 					"response": []
 				}
@@ -581,6 +672,54 @@
 									"key": "productCode",
 									"value": "1"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Message Update order status",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "c222a31e-ea3e-4079-9968-4043d626103b",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cpf\": \"11111111111\",\n    \"userId\": 5706627130851328,\n    \"orderId\": 5545465645645461,\n    \"orderStatus\": \"Delivering\",\n    \"message\": \"Alteração de status de pedido\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/api/order/sendOrder",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"sendOrder"
 							]
 						}
 					},
