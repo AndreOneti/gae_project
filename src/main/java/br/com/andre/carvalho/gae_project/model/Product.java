@@ -8,7 +8,7 @@ public class Product implements Serializable {
     private String name;
     private float price;
     private int code;
-    private long id;
+    private Long id;
 
     public String getProductID() {
         return productID;
@@ -50,11 +50,11 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

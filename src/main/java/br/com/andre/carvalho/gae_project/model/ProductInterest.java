@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class ProductInterest implements Serializable {
     private Long id;
-    private Long price;
     private String cpf;
+    private Double price;
     private String userId;
     private String productId;
 
@@ -18,11 +18,11 @@ public class ProductInterest implements Serializable {
         this.id = id;
     }
 
-    public Long getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

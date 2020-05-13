@@ -1,7 +1,6 @@
 package br.com.andre.carvalho.gae_project.repository;
 
-import br.com.andre.carvalho.gae_project.exception.ProductNotFoundException;
-import br.com.andre.carvalho.gae_project.exception.UserAlreadyExistsException;
+import br.com.andre.carvalho.gae_project.exception.ProductInterestNotFoundException;
 import br.com.andre.carvalho.gae_project.exception.UserNotFoundException;
 import br.com.andre.carvalho.gae_project.model.ProductInterest;
 import br.com.andre.carvalho.gae_project.model.User;
@@ -9,132 +8,96 @@ import com.google.appengine.api.datastore.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Repository
 public class ProductInterestRepository {
     private static final Logger log = Logger.getLogger("ProductInterestRepository");
 
-    private static final String INTEREST_KIND = "ProductInterest";
-    private static final String INTEREST_KEY = "interestKey";
-    private static final String PRODUCT_KIND = "Products";
-    private static final String USER_KIND = "Users";
+    private static final String PRODUCT_INTEREST_KIND = "ProductInterest";
+    private static final String PRODUCT_INTEREST_KEY = "productInterestKey";
 
-    private static final String PROPERTY_USER_CPF = "cpf";
-    private static final String PROPERTY_USER_ID = "UserId";
-    private static final String PROPERTY_PRODUCT_PRICE = "price";
-    private static final String PROPERTY_ID = "ProductInterestId";
-    private static final String PROPERTY_PRODUCT_CODE = "Code";
-    private static final String PROPERTY_PRODUCT_ID = "ProductId";
+    private static final String PROPERTY_ID = "id";
+    private static final String USER_ID = "userId";
+    private static final String PROPERTY_CPF = "cpf";
+    private static final String PRODUCT_ID = "productId";
+    private static final String PROPERTY_PRICE = "price";
 
     private void productInterestToEntity(ProductInterest productInterest, Entity productInterestEntity) {
         productInterestEntity.setProperty(PROPERTY_ID, productInterest.getId());
-        productInterestEntity.setProperty(PROPERTY_USER_CPF, productInterest.getCpf());
-        productInterestEntity.setProperty(PROPERTY_USER_ID, productInterest.getUserId());
-        productInterestEntity.setProperty(PROPERTY_PRODUCT_PRICE, productInterest.getPrice());
-        productInterestEntity.setProperty(PROPERTY_PRODUCT_ID, productInterest.getProductId());
+        productInterestEntity.setProperty(USER_ID, productInterest.getUserId());
+        productInterestEntity.setProperty(PROPERTY_CPF, productInterest.getCpf());
+        productInterestEntity.setProperty(PRODUCT_ID, productInterest.getProductId());
+        productInterestEntity.setProperty(PROPERTY_PRICE, productInterest.getPrice());
     }
 
     private ProductInterest entityToProductInterest(Entity productInterestEntity) {
         ProductInterest productInterest = new ProductInterest();
         productInterest.setId(productInterestEntity.getKey().getId());
-        productInterest.setCpf((String) productInterestEntity.getProperty(PROPERTY_USER_CPF));
-        productInterest.setUserId((String) productInterestEntity.getProperty(PROPERTY_USER_ID));
-        productInterest.setPrice((Long) productInterestEntity.getProperty(PROPERTY_PRODUCT_PRICE));
-        productInterest.setProductId((String) productInterestEntity.getProperty(PROPERTY_PRODUCT_ID));
+        productInterest.setUserId((String) productInterestEntity.getProperty(USER_ID));
+        productInterest.setCpf((String) productInterestEntity.getProperty(PROPERTY_CPF));
+        productInterest.setPrice((Double) productInterestEntity.getProperty(PROPERTY_PRICE));
+        productInterest.setProductId((String) productInterestEntity.getProperty(PRODUCT_ID));
         return productInterest;
     }
 
-    private boolean checkIfCpfExist(ProductInterest productInterest) {
+    public ProductInterest saveProductInterest(ProductInterest productInterest) throws UserNotFoundException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query.Filter filter = new Query.FilterPredicate(PROPERTY_USER_CPF, Query.FilterOperator.EQUAL, productInterest.getCpf());
-        Query query = new Query(USER_KIND).setFilter(filter);
-        Entity userEntity = datastore.prepare(query).asSingleEntity();
-        if (userEntity == null) {
-            return false;
-        } else {
-            if (productInterest.getId() == null) {
-                return true;
+        UserRepository userRepository = new UserRepository();
+        Optional optUser = userRepository.getByCpf(productInterest.getCpf());
+        if (optUser.isPresent()) {
+            Entity productInterestVerificationEntity = getByCpfAndProductId(productInterest.getCpf(), productInterest.getProductId());
+            if (productInterestVerificationEntity == null) {
+                Key productInterestKey = KeyFactory.createKey(PRODUCT_INTEREST_KIND, PRODUCT_INTEREST_KEY);
+                Entity productInterestEntity = new Entity(PRODUCT_INTEREST_KIND, productInterestKey);
+                productInterestToEntity(productInterest, productInterestEntity);
+                datastore.put(productInterestEntity);
+                productInterest.setId(productInterestEntity.getKey().getId());
+                return productInterest;
             } else {
-                return userEntity.getKey().getId() != productInterest.getId();
+                productInterestVerificationEntity.setProperty(PROPERTY_PRICE, productInterest.getPrice());
+                datastore.put(productInterestVerificationEntity);
+                return entityToProductInterest(productInterestVerificationEntity);
             }
+        } else {
+            throw new UserNotFoundException("Usuário com cpf " + productInterest.getCpf() + " não encontrado!");
         }
     }
 
-    private boolean checkIfProductExist(ProductInterest productInterest) {
+    private Entity getByCpfAndProductId(String cpf, String productId) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query.Filter filter = new Query.FilterPredicate(PROPERTY_PRODUCT_CODE, Query.FilterOperator.EQUAL, Integer.parseInt(productInterest.getProductId()));
-        Query query = new Query(PRODUCT_KIND).setFilter(filter);
-        Entity productEntity = datastore.prepare(query).asSingleEntity();
-        if (productEntity == null) {
-            return false;
-        } else {
-            if (productInterest.getId() == null) {
-                return true;
-            } else {
-                return productEntity.getKey().getId() != productInterest.getId();
-            }
-        }
+        Query.Filter filterCpf = new Query.FilterPredicate(PROPERTY_CPF, Query.FilterOperator.EQUAL, cpf);
+        Query.Filter filterProductId = new Query.FilterPredicate(PRODUCT_ID, Query.FilterOperator.EQUAL, productId);
+        Query.Filter filterCpfProductId = Query.CompositeFilterOperator.and(filterCpf, filterProductId);
+        Query query = new Query(PRODUCT_INTEREST_KIND).setFilter(filterCpfProductId);
+        Entity productInterestEntity = datastore.prepare(query).asSingleEntity();
+        return productInterestEntity;
     }
 
-    public ProductInterest saveProductInterest(ProductInterest productInterest) throws UserNotFoundException, ProductNotFoundException {
+    public List<ProductInterest> getProductInterest(String cpf) {
+        List<ProductInterest> productInterests = new ArrayList<>();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        if (!checkIfCpfExist(productInterest)) {
-            throw new UserNotFoundException("Usuário " + productInterest.getCpf() + " não encontrado");
-        } else if (!checkIfProductExist(productInterest)) {
-            System.out.println("Deu erro de produto");
-            throw new ProductNotFoundException("Produto " + productInterest.getProductId() + " não encontrado");
-        } else {
-            //  Query by User
-            Query.Filter userCpfFilter = new Query.FilterPredicate(PROPERTY_USER_CPF, Query.FilterOperator.EQUAL, productInterest.getCpf());
-            Query userQuery = new Query(INTEREST_KIND).setFilter(userCpfFilter);
-            Entity userEntity = datastore.prepare(userQuery).asSingleEntity();
-            //  Query by Product
-            Query.Filter emailFilter = new Query.FilterPredicate(PROPERTY_PRODUCT_ID, Query.FilterOperator.EQUAL, productInterest.getProductId());
-            Query productQuery = new Query(INTEREST_KIND).setFilter(emailFilter);
-            Entity productIdEntity = datastore.prepare(productQuery).asSingleEntity();
-//            System.out.println(userEntity);
-//            System.out.println(productIdEntity);
-            if (userEntity == null && productIdEntity == null) {
-                Key userKey = KeyFactory.createKey(INTEREST_KIND, INTEREST_KEY);
-                Entity productEntity = new Entity(INTEREST_KIND, userKey);
-                productInterestToEntity(productInterest, productEntity);
-                datastore.put(productEntity);
-                productInterest.setId(productEntity.getKey().getId());
-            } else {
-                if (userEntity.getKey() != productIdEntity.getKey()) {
-                    Key userKey = KeyFactory.createKey(INTEREST_KIND, INTEREST_KEY);
-                    Entity productEntity = new Entity(INTEREST_KIND, userKey);
-                    productInterestToEntity(productInterest, productEntity);
-                    datastore.put(productEntity);
-                    productInterest.setId(productEntity.getKey().getId());
-                } else {
-                    productInterestToEntity(productInterest, userEntity);
-                    datastore.put(userEntity);
-                    productInterest.setId(userEntity.getKey().getId());
-                }
-            }
+        Query.Filter filterCpf = new Query.FilterPredicate(PROPERTY_CPF, Query.FilterOperator.EQUAL, cpf);
+        Query query = new Query(PRODUCT_INTEREST_KIND).setFilter(filterCpf);
+        List<Entity> productInterestEntities = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
+        for (Entity productInterestEntity : productInterestEntities) {
+            ProductInterest productInterest = entityToProductInterest(productInterestEntity);
+            productInterests.add(productInterest);
         }
-        return productInterest;
+        return productInterests;
     }
 
-    public List<ProductInterest> getProductInterest() {
-        List<ProductInterest> productInterest = new ArrayList<>();
-
+    public ProductInterest deleteProductInterest(String cpf, String productId) throws ProductInterestNotFoundException {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-        Query query;
-        query = new Query(INTEREST_KIND).addSort(PROPERTY_USER_CPF, Query.SortDirection.ASCENDING);
-
-        List<Entity> prodEntities = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
-
-        for (Entity prodEntity : prodEntities) {
-            ProductInterest prod = entityToProductInterest(prodEntity);
-            productInterest.add(prod);
+        Entity productInterestEntity = getByCpfAndProductId(cpf, productId);
+        if (productInterestEntity != null) {
+            datastore.delete(productInterestEntity.getKey());
+            return entityToProductInterest(productInterestEntity);
+        } else {
+            throw new ProductInterestNotFoundException("Usuário com cpf " + cpf + " e ProductId " +
+                    productId + "não encontrado!");
         }
-        return productInterest;
     }
 }

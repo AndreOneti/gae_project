@@ -545,7 +545,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "f8b67ce8-e816-4409-aa5d-d57f97772bfa",
+									"value": "137743b8-98fe-4bc3-8041-aa8f7ee24c8b",
 									"type": "string"
 								},
 								{
@@ -563,13 +563,69 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{server}}/api/interest",
+							"raw": "{{server}}/api/interest/bycpf?cpf=11111111111",
 							"host": [
 								"{{server}}"
 							],
 							"path": [
 								"api",
-								"interest"
+								"interest",
+								"bycpf"
+							],
+							"query": [
+								{
+									"key": "cpf",
+									"value": "11111111111"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delet a Product Interest",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessToken",
+									"value": "137743b8-98fe-4bc3-8041-aa8f7ee24c8b",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "bearer",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server}}/api/interest/bycpf?cpf=11111111111&productId=2",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"api",
+								"interest",
+								"bycpf"
+							],
+							"query": [
+								{
+									"key": "cpf",
+									"value": "11111111111"
+								},
+								{
+									"key": "productId",
+									"value": "2"
+								}
 							]
 						}
 					},
@@ -583,7 +639,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "1c67c9e4-f3bd-4bb5-8523-d2c74d1970bd",
+									"value": "137743b8-98fe-4bc3-8041-aa8f7ee24c8b",
 									"type": "string"
 								},
 								{
@@ -602,7 +658,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"price\": 9,\n    \"cpf\": \"11111111111\",\n    \"userId\": \"4644337115725824\",\n    \"productId\": \"1\"\n}",
+							"raw": "{\n    \"price\": 10,\n    \"productId\": \"1\",\n    \"cpf\": \"11111111111\",\n    \"userId\": \"4644337115725824\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
