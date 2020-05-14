@@ -8,9 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -78,6 +78,32 @@ public class OrderController {
         } else {
             log.severe("Usuário não encontrado");
             return new ResponseEntity<String>("Usuário não encontrado", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    public String sendProductOffer(List<User> users, String productId) {
+        try {
+            List<Message> messages = new ArrayList<>();
+            for (User user : users) {
+                String registrationToken = user.getFcmRegId();
+                String sendMsg = "Caiu o preço do produdo " + productId + " para o esperado, venha conferir!";
+                Message message = Message.builder()
+                        .putData("product", sendMsg)
+                        .setToken(registrationToken)
+                        .build();
+                messages.add(message);
+            }
+            List<SendResponse> responses = FirebaseMessaging.getInstance().sendAll(messages).getResponses();
+            log.info("Reposta do FCM: " + responses);
+            List<String> responseString = new ArrayList<>();
+            for (SendResponse response : responses) {
+                responseString.add(response.toString());
+            }
+            return responseString.toString();
+
+        } catch (FirebaseMessagingException e) {
+            log.severe("Falha ao enviar mensagem pelo FCM: " + e.getMessage());
+            return e.getMessage();
         }
     }
 }

@@ -4,4 +4,8 @@
         <property name="Code" direction="asc"/>
         <property name="Model" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="ProductInterest" ancestor="false" source="manual">
+        <property name="productId" direction="asc"/>
+        <property name="price" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>

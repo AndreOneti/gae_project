@@ -81,7 +81,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "0a69f1ed-57ee-441d-bb49-a830283e103b",
+									"value": "73d5ef62-534b-4916-86ad-e78fdf1f0e7d",
 									"type": "string"
 								},
 								{
@@ -205,7 +205,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "0cf2ec46-1116-49bd-86d3-8f17ab018ebc",
+									"value": "73d5ef62-534b-4916-86ad-e78fdf1f0e7d",
 									"type": "string"
 								},
 								{
@@ -224,7 +224,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"model\": \"Model 1\",\n    \"productID\": \"1\",\n    \"name\": \"Name 1\",\n    \"price\": 100,\n    \"code\": 1\n}",
+							"raw": "{\n    \"model\": \"Model 1\",\n    \"productID\": \"1\",\n    \"name\": \"Name 1\",\n    \"price\": 8,\n    \"code\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -351,7 +351,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "ca03a8c7-3361-4d5c-9863-561d9df088a1",
+									"value": "7da7fec5-160a-413f-a36f-58439e46484e",
 									"type": "string"
 								},
 								{
@@ -390,7 +390,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "93015a98-72ea-4efa-987f-31e25ee72a52",
+									"value": "7da7fec5-160a-413f-a36f-58439e46484e",
 									"type": "string"
 								},
 								{
@@ -484,7 +484,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "c222a31e-ea3e-4079-9968-4043d626103b",
+									"value": "7da7fec5-160a-413f-a36f-58439e46484e",
 									"type": "string"
 								},
 								{
@@ -545,7 +545,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "137743b8-98fe-4bc3-8041-aa8f7ee24c8b",
+									"value": "c2683665-350c-4d6b-914c-93536b05f06a",
 									"type": "string"
 								},
 								{
@@ -639,7 +639,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "137743b8-98fe-4bc3-8041-aa8f7ee24c8b",
+									"value": "7da7fec5-160a-413f-a36f-58439e46484e",
 									"type": "string"
 								},
 								{
@@ -741,7 +741,7 @@
 							"oauth2": [
 								{
 									"key": "accessToken",
-									"value": "c222a31e-ea3e-4079-9968-4043d626103b",
+									"value": "7da7fec5-160a-413f-a36f-58439e46484e",
 									"type": "string"
 								},
 								{

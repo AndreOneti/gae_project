@@ -33,7 +33,7 @@ public class ProductInterestRepository {
         productInterestEntity.setProperty(PROPERTY_PRICE, productInterest.getPrice());
     }
 
-    private ProductInterest entityToProductInterest(Entity productInterestEntity) {
+    public ProductInterest entityToProductInterest(Entity productInterestEntity) {
         ProductInterest productInterest = new ProductInterest();
         productInterest.setId(productInterestEntity.getKey().getId());
         productInterest.setUserId((String) productInterestEntity.getProperty(USER_ID));

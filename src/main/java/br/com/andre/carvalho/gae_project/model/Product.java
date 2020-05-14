@@ -6,7 +6,7 @@ public class Product implements Serializable {
     private String productID;
     private String model;
     private String name;
-    private float price;
+    private Double price;
     private int code;
     private Long id;
 
@@ -42,11 +42,11 @@ public class Product implements Serializable {
         this.code = code;
     }
 
-    public float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

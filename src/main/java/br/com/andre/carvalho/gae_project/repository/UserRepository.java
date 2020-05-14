@@ -75,7 +75,7 @@ public class UserRepository {
         userEntity.setProperty(PROPERTY_CPF, user.getCpf());
     }
 
-    private User entityToUser(Entity userEntity) {
+    public User entityToUser(Entity userEntity) {
         User user = new User();
         user.setId(userEntity.getKey().getId());
         user.setEmail((String) userEntity.getProperty(PROPERTY_EMAIL));
