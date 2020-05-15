@@ -2,11 +2,17 @@ package br.com.andre.carvalho.gae_project.controller;
 
 import br.com.andre.carvalho.gae_project.exception.ProductInterestNotFoundException;
 import br.com.andre.carvalho.gae_project.exception.UserNotFoundException;
+import br.com.andre.carvalho.gae_project.model.Product;
 import br.com.andre.carvalho.gae_project.model.ProductInterest;
 import br.com.andre.carvalho.gae_project.model.User;
 import br.com.andre.carvalho.gae_project.repository.ProductInterestRepository;
+import br.com.andre.carvalho.gae_project.repository.ProductRepository;
 import br.com.andre.carvalho.gae_project.repository.UserRepository;
 import br.com.andre.carvalho.gae_project.util.CheckRole;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +34,9 @@ public class ProductInterestController {
     private ProductInterestRepository productInterestRepository;
 
     @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -38,11 +47,16 @@ public class ProductInterestController {
         Optional<User> optUser = userRepository.getByCpf(productInterest.getCpf());
         if (optUser.isPresent()) {
             if (hasRoleAdmin || userDetails.getUsername().equals(optUser.get().getEmail())) {
-                try {
-                    return new ResponseEntity<ProductInterest>(productInterestRepository.saveProductInterest(productInterest),
-                            HttpStatus.OK);
-                } catch (UserNotFoundException e) {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                Entity productEntity = productRepository.getByProductId(productInterest.getProductId());
+                if (productEntity != null) {
+                    try {
+                        return new ResponseEntity<ProductInterest>(productInterestRepository.saveProductInterest(productInterest),
+                                HttpStatus.OK);
+                    } catch (UserNotFoundException e) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    }
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
             } else {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

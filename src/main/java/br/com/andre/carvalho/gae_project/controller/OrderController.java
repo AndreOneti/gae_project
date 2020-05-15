@@ -1,10 +1,16 @@
 package br.com.andre.carvalho.gae_project.controller;
 
 import br.com.andre.carvalho.gae_project.model.Order;
+import br.com.andre.carvalho.gae_project.model.Product;
 import br.com.andre.carvalho.gae_project.model.User;
+import br.com.andre.carvalho.gae_project.repository.ProductRepository;
 import br.com.andre.carvalho.gae_project.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -13,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -32,6 +35,9 @@ public class OrderController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -104,6 +110,55 @@ public class OrderController {
         } catch (FirebaseMessagingException e) {
             log.severe("Falha ao enviar mensagem pelo FCM: " + e.getMessage());
             return e.getMessage();
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path = "/sendproduct")
+    public ResponseEntity<String> sendProduct(
+            @RequestParam("email") String email,
+            @RequestParam("productCode") int productCode) {
+        Optional<User> optUser = userRepository.getByEmail(email);
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            Product product = findProduct(productCode);
+            if (product != null) {
+                String registrationToken = user.getFcmRegId();
+                try {
+                    Message message = Message.builder()
+                            .putData("product", objectMapper.writeValueAsString(product))
+                            .setToken(registrationToken)
+                            .build();
+                    String response = FirebaseMessaging.getInstance().send(message);
+                    log.info("Mensagem enviada ao produto " + product.getName());
+                    log.info("Reposta do FCM: " + response);
+                    return new ResponseEntity<String>("Mensagem enviada com o produto" + product.getName(), HttpStatus.OK);
+                } catch (FirebaseMessagingException | JsonProcessingException e) {
+                    log.severe("Falha ao enviar mensagem pelo FCM: " + e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                log.severe("Produto não encontrado");
+                return new ResponseEntity<String>("Produto não encontrado", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            log.severe("Usuário não encontrado");
+            return new ResponseEntity<String>("Usuário não encontrado", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private Product findProduct(int code) {
+        DatastoreService datastore = DatastoreServiceFactory
+                .getDatastoreService();
+        Query.Filter codeFilter = new Query.FilterPredicate("Code", Query.FilterOperator.EQUAL, code);
+
+        Query query = new Query("Products").setFilter(codeFilter);
+        Entity productEntity = datastore.prepare(query).asSingleEntity();
+
+        if (productEntity != null) {
+            return productRepository.entityToProduct(productEntity);
+        } else {
+            return null;
         }
     }
 }
