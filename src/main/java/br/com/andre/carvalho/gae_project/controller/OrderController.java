@@ -65,7 +65,7 @@ public class OrderController {
             String registrationToken = user.getFcmRegId();
             try {
                 Message message = Message.builder()
-                        .putData("product", objectMapper.writeValueAsString(order))
+                        .putData("salesMessage", objectMapper.writeValueAsString(order))
                         .setToken(registrationToken)
                         .build();
                 String response = FirebaseMessaging.getInstance().send(message);
@@ -94,7 +94,7 @@ public class OrderController {
                 String registrationToken = user.getFcmRegId();
                 String sendMsg = "Caiu o preço do produdo " + productId + " para o esperado, venha conferir!";
                 Message message = Message.builder()
-                        .putData("product", sendMsg)
+                        .putData("salesMessage", sendMsg)
                         .setToken(registrationToken)
                         .build();
                 messages.add(message);
